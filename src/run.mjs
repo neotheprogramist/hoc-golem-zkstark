@@ -6,6 +6,7 @@ const value = process.argv[3];
 
 (async () => {
   const golemClient = new GolemNetwork({
+    package: "",
     yagna: {
       apiKey: "try_golem",
     },
