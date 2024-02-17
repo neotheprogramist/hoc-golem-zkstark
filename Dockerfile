@@ -15,8 +15,8 @@ COPY --from=planner /app/recipe.json recipe.json
 # Notice that we are specifying the --target flag!
 RUN cargo chef cook --release --target x86_64-unknown-linux-musl --recipe-path recipe.json
 COPY . .
-RUN cargo build --release --target x86_64-unknown-linux-musl --bin verify
+RUN cargo build --release --target x86_64-unknown-linux-musl --bin app
 
 FROM alpine AS runtime
-COPY --from=builder /app/target/release/verify /usr/local/bin/
-ENTRYPOINT [ "verify" ]
+COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/app /usr/local/bin/
+ENTRYPOINT [ "app" ]
