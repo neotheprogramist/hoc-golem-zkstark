@@ -1,13 +1,18 @@
+use clap::Parser;
 use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Parser)]
+struct ProgramArgs {
+    /// program hash
+    hash: String,
+}
 
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();
+    let args = ProgramArgs::parse();
 
-    let data = Request {
-        hash: "1414999590036870372770778692906046516351208194453833185145989807125183271772"
-            .to_string(),
-    };
+    let data = Request { hash: args.hash };
     let result = reqwest::Client::new()
         .get("http://localhost:3000")
         .query(&data)
@@ -15,7 +20,7 @@ async fn main() {
         .await
         .unwrap();
     let response: Option<Response> = result.json().await.unwrap();
-    println!("{:?}", response);
+    tracing::info!("{:?}", response);
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]

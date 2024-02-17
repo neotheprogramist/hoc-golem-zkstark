@@ -1,16 +1,26 @@
+use clap::Parser;
 use serde::{Deserialize, Serialize};
 use tokio::io::{self, AsyncReadExt};
+
+#[derive(Debug, Parser)]
+struct ProgramArgs {
+    /// program hash
+    hash: String,
+
+    /// value
+    value: String,
+}
 
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();
+    let args = ProgramArgs::parse();
+
     let mut proof = String::new();
     io::stdin().read_to_string(&mut proof).await.unwrap();
-
     let data = Request {
-        hash: "1414999590036870372770778692906046516351208194453833185145989807125183271772"
-            .to_string(),
-        value: "1".to_string(),
+        hash: args.hash,
+        value: args.value,
         proof,
     };
     let result = reqwest::Client::new()
@@ -19,7 +29,7 @@ async fn main() {
         .send()
         .await
         .unwrap();
-    println!("{:?}", result);
+    tracing::info!("{:?}", result);
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
