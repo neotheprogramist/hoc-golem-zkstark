@@ -1,4 +1,4 @@
-#!/usr/bin/env zsh
+#!/usr/bin/env bash
 
 cargo run --release --bin prove \
     resources/main_trace.bin \

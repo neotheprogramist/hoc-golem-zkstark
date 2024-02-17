@@ -1,9 +1,12 @@
 use clap::Parser;
 use lambdaworks_math::field::fields::fft_friendly::stark_252_prime_field::Stark252PrimeField;
 use platinum_prover::air::{generate_cairo_proof, PublicInputs};
-use stark_platinum_prover::proof::{options::{ProofOptions, SecurityLevel}, stark::StarkProof};
-use tokio::time::Instant;
 use platinum_prover::runner::run::generate_prover_args_from_trace;
+use stark_platinum_prover::proof::{
+    options::{ProofOptions, SecurityLevel},
+    stark::StarkProof,
+};
+use tokio::time::Instant;
 
 #[derive(Parser)]
 struct ProveArgs {
@@ -18,11 +21,9 @@ async fn main() {
     let args = ProveArgs::parse();
     let proof_options = ProofOptions::new_secure(SecurityLevel::Conjecturable100Bits, 3);
 
-    let Some((proof, pub_inputs)) = generate_proof_from_trace(
-        &args.trace_bin_path,
-        &args.memory_bin_path,
-        &proof_options,
-    ) else {
+    let Some((proof, pub_inputs)) =
+        generate_proof_from_trace(&args.trace_bin_path, &args.memory_bin_path, &proof_options)
+    else {
         return;
     };
 
@@ -85,7 +86,7 @@ fn write_proof(
     bytes.extend(proof_bytes);
     bytes.extend(pub_inputs_bytes);
 
-    let Ok(()) = std::fs::write(&proof_path, bytes) else {
+    let Ok(()) = std::fs::write(&proof_path, prefix_hex::encode(bytes)) else {
         eprintln!("Error writing proof to file: {}", &proof_path);
         return;
     };

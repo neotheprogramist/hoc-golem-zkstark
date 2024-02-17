@@ -30,14 +30,9 @@ func main{output_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr: felt*}
         data_ptr=password,
         data_length=password_len,
     );
-    let (hash_state_ptr) = hash_update{hash_ptr=pedersen_ptr}(
-        hash_state_ptr=hash_state_ptr,
-        data_ptr=&value,
-        data_length=1,
-    );
-    let (main_page_hash) = hash_finalize{hash_ptr=pedersen_ptr}(hash_state_ptr=hash_state_ptr);
+    let (password_hash) = hash_finalize{hash_ptr=pedersen_ptr}(hash_state_ptr=hash_state_ptr);
 
-    assert output_ptr[0] = main_page_hash;
+    assert output_ptr[0] = password_hash;
     assert output_ptr[1] = value;
     let output_ptr = output_ptr + 2;
 
