@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 # Define the name of the virtual environment
 VENV_NAME=".venv"

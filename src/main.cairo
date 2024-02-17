@@ -1,29 +1,35 @@
-// Copyright 2023 StarkWare Industries Ltd.
-//
-// Licensed under the Apache License, Version 2.0 (the "License").
-// You may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-// https://www.starkware.co/open-source-license/
-//
-// Unless required by applicable law or agreed to in writing,
-// software distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions
-// and limitations under the License.
-
 %builtins output pedersen range_check
-func main{output_ptr: felt*, pedersen_ptr: felt*, range_check_ptr: felt*}() -> () {
+from starkware.cairo.common.hash_state import hash_finalize, hash_init, hash_update
+from starkware.cairo.common.cairo_builtins import HashBuiltin
+
+func main{output_ptr: felt*, pedersen_ptr: HashBuiltin*, range_check_ptr: felt*}() -> () {
     alloc_locals;
 
     // Load fibonacci_claim_index and copy it to the output segment.
-    local fibonacci_claim_index;
-    %{ ids.fibonacci_claim_index = program_input['fibonacci_claim_index'] %}
+    local password: felt*;
+    local password_len: felt;
+    %{
+        program_input_password = program_input["password"]
 
-    assert output_ptr[0] = fibonacci_claim_index;
-    let res = fib(1, 1, fibonacci_claim_index);
-    assert output_ptr[1] = res;
-    let output_ptr = output_ptr + 2;
+        password = [
+            int(password_char)
+            for password_char in program_input_password
+        ]
+        ids.password = segments.gen_arg(password)
+        ids.password_len = len(password)
+    %}
+
+    // Main page hash.
+    let (hash_state_ptr) = hash_init();
+    let (hash_state_ptr) = hash_update{hash_ptr=pedersen_ptr}(
+        hash_state_ptr=hash_state_ptr,
+        data_ptr=password,
+        data_length=password_len,
+    );
+    let (main_page_hash) = hash_finalize{hash_ptr=pedersen_ptr}(hash_state_ptr=hash_state_ptr);
+
+    assert output_ptr[0] = main_page_hash;
+    let output_ptr = output_ptr + 1;
 
     // Return the updated output_ptr.
     return ();

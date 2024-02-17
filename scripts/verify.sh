@@ -1,3 +1,3 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-cargo run --release < resources/main.proof
+cargo run --release --bin verify < resources/main.proof

@@ -1,8 +1,9 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
 source .venv/bin/activate && \
 cairo-run \
   --proof_mode \
+  --print_output \
   --layout small \
   --air_public_input resources/main_public_input.json \
   --air_private_input resources/main_private_input.json \
