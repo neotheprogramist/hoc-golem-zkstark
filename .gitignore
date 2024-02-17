@@ -1,0 +1,12 @@
+.venv
+.env
+node_modules
+*.gvmi
+*.bin
+package-lock.json
+Cargo.lock
+resources
+
+# Added by cargo
+
+/target
