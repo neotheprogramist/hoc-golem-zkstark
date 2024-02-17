@@ -69,6 +69,7 @@ async fn post_handler(
     Json(payload): Json<Data>,
 ) -> Result<Json<Option<Entry>>, StatusCode> {
     let proof = prefix_hex::decode(payload.proof).map_err(|_| StatusCode::BAD_REQUEST)?;
+    tracing::info!("proof verifying...");
     if false == hoc_golem_zkstark::verify(proof) {
         return Err(StatusCode::FORBIDDEN);
     }
