@@ -1,0 +1,36 @@
+meta:
+  name: "STARK verifier dApp"
+  description: "Docker container for STARK verifier dApp"
+  author: "Paweł Nowak"
+  version: "0.1.0"
+payloads:
+  app:
+    runtime: "vm"
+    params:
+      image_hash: "663d4c0808e2cd6b22d8a3fc2b964788fb5e462a27d29b596dd420352f2d8ff5"
+  api:
+    runtime: "vm"
+    params:
+      image_hash: "663d4c0808e2cd6b22d8a3fc2b964788fb5e462a27d29b596dd420352f2d8ff5"
+nodes:
+  app:
+    payload: "app"
+    init:
+      - run:
+          args:
+            - "app"
+    network: "default"
+    ip:
+      - "192.168.0.2"
+  api:
+    payload: "app"
+    init:
+      - run:
+          args:
+            - "app"
+    network: "default"
+    ip:
+      - "192.168.0.3"
+networks:
+  default:
+    ip: "192.168.0.0/24"

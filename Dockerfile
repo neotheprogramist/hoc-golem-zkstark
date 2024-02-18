@@ -23,4 +23,5 @@ COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/get /usr/local
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/post /usr/local/bin/
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/prove /usr/local/bin/
 COPY --from=builder /app/target/x86_64-unknown-linux-musl/release/verify /usr/local/bin/
-CMD [ "app" ]
+WORKDIR /app
+COPY . .

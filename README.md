@@ -18,12 +18,12 @@ yagna service run
 
 yagna payment fund
 
-podman build -t golem-example .
+podman build -t neoprogram/hoc-golem-zkstark:latest .
 
-podman push localhost/golem-example:latest docker.io/neoprogram/golem-example
+podman push localhost/hoc-golem-zkstark:latest docker.io/neoprogram/hoc-golem-zkstark:latest
 
-npx gvmkit-build neoprogram/golem-example
+npx gvmkit-build neoprogram/hoc-golem-zkstark:latest
 
-npx gvmkit-build neoprogram/hoc-golem-zkstark --push --nologin
+npx gvmkit-build neoprogram/hoc-golem-zkstark:latest --push --nologin
 
-npx ts-node src/index.ts
+node src/verify.mjs

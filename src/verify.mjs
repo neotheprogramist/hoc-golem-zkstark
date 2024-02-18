@@ -1,9 +1,6 @@
 import { GolemNetwork } from "@golem-sdk/golem-js";
 import process from "process";
 
-const hash = process.argv[2];
-const value = process.argv[3];
-
 (async () => {
   const golemClient = new GolemNetwork({
     yagna: {
@@ -42,25 +39,10 @@ const value = process.argv[3];
   });
 
   job.startWork(async (ctx) => {
-    let result = await ctx.beginBatch().run(`get ${hash}`).end();
-    return result;
-  });
-
-  await job.waitForResult();
-
-  job.startWork(async (ctx) => {
     let result = await ctx
       .beginBatch()
-      .uploadFile("resources/main.proof", "/main.proof")
-      .run(`post ${hash} ${value} < /main.proof`)
+      .run("verify < /app/resources/main.proof")
       .end();
-    return result;
-  });
-
-  await job.waitForResult();
-
-  job.startWork(async (ctx) => {
-    let result = await ctx.beginBatch().run(`get ${hash}`).end();
     return result;
   });
 
