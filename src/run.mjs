@@ -2,7 +2,7 @@ import { GolemNetwork } from "@golem-sdk/golem-js";
 import process from "process";
 
 const hash = process.argv[2];
-// const value = process.argv[3];
+const value = process.argv[3];
 
 (async () => {
   const golemClient = new GolemNetwork({
@@ -42,12 +42,27 @@ const hash = process.argv[2];
   });
 
   job.startWork(async (ctx) => {
+    let result = await ctx.beginBatch().run(`get ${hash}`).end();
+    return result;
+  });
+
+  await job.waitForResult();
+
+  job.startWork(async (ctx) => {
     let result = await ctx
       .beginBatch()
-      // .uploadFile("resources/main.proof", "/app/resources/main.proof")
-      .run(`ls -al`)
-      // .downloadFile("ls-al.txt", "resources/ls-al.txt")
+      .uploadFile("resources/main.proof", "/main.proof")
+      .run(`post ${hash} ${value} < /main.proof`)
       .end();
     return result;
   });
+
+  await job.waitForResult();
+
+  job.startWork(async (ctx) => {
+    let result = await ctx.beginBatch().run(`get ${hash}`).end();
+    return result;
+  });
+
+  await job.waitForResult();
 })();
