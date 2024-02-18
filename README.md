@@ -16,4 +16,3 @@ Deploy to Golem:
 - podman push localhost/hoc-golem-zkstark:latest docker.io/neoprogram/hoc-golem-zkstark:latest
 - npx gvmkit-build neoprogram/hoc-golem-zkstark:latest --push --nologin
 - node src/verify.mjs
-- node src/verify.mjs
