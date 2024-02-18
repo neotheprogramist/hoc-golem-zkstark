@@ -2,13 +2,12 @@ import { GolemNetwork } from "@golem-sdk/golem-js";
 import process from "process";
 
 const hash = process.argv[2];
-const value = process.argv[3];
+// const value = process.argv[3];
 
 (async () => {
   const golemClient = new GolemNetwork({
-    package: "",
     yagna: {
-      apiKey: "try_golem",
+      apiKey: "hoc_golem_zkstark",
     },
   });
 
@@ -24,7 +23,8 @@ const value = process.argv[3];
 
   const job = golemClient.createJob({
     package: {
-      imageTag: "neoprogram/golem-example:latest",
+      imageHash:
+        "17502f76ba1866ba9935970a8f18142abc9f2db4ec49025f51b721abe1292ceb",
     },
   });
 
@@ -42,16 +42,12 @@ const value = process.argv[3];
   });
 
   job.startWork(async (ctx) => {
-    await ctx
+    let result = await ctx
       .beginBatch()
-      .uploadFile("resources/main.proof", "/app/resources/main.proof")
-      .run(
-        `cargo run --release --bin post ${hash} ${value} < resources/main.proof`
-      )
+      // .uploadFile("resources/main.proof", "/app/resources/main.proof")
+      .run(`ls -al`)
+      // .downloadFile("ls-al.txt", "resources/ls-al.txt")
       .end();
+    return result;
   });
-
-  const result = await job.waitForResult();
-
-  console.log(result);
 })();

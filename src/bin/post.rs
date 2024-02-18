@@ -13,7 +13,6 @@ struct ProgramArgs {
 
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::fmt::init();
     let args = ProgramArgs::parse();
 
     let mut proof = String::new();
@@ -29,7 +28,7 @@ async fn main() {
         .send()
         .await
         .unwrap();
-    tracing::info!("{:?}", result);
+    println!("{:?}", result);
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]

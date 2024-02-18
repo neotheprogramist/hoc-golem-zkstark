@@ -24,6 +24,6 @@ podman push localhost/golem-example:latest docker.io/neoprogram/golem-example
 
 npx gvmkit-build neoprogram/golem-example
 
-npx gvmkit-build neoprogram/golem-example --push --nologin
+npx gvmkit-build neoprogram/hoc-golem-zkstark --push --nologin
 
 npx ts-node src/index.ts

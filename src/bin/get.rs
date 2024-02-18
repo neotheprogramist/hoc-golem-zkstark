@@ -9,7 +9,6 @@ struct ProgramArgs {
 
 #[tokio::main]
 async fn main() {
-    tracing_subscriber::fmt::init();
     let args = ProgramArgs::parse();
 
     let data = Request { hash: args.hash };
@@ -20,7 +19,7 @@ async fn main() {
         .await
         .unwrap();
     let response: Option<Response> = result.json().await.unwrap();
-    tracing::info!("{:?}", response);
+    println!("{:?}", response);
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize)]
