@@ -12,7 +12,17 @@ pub fn verify(proof: Vec<u8>) -> bool {
     }
 
     // Proof len was stored as an u32, 4u8 needs to be read
-    let proof_len = u32::from_le_bytes(bytes[0..4].try_into().unwrap()) as usize;
+    let proof_len = if let Some(x) = bytes.get(0..4) {
+        if let Ok(x) = x.try_into() {
+            u32::from_le_bytes(x) as usize
+        } else {
+            eprintln!("Error reading proof");
+            return false;
+        }
+    } else {
+        eprintln!("Error reading proof");
+        return false;
+    };
 
     bytes = &bytes[4..];
     if bytes.len() < proof_len {

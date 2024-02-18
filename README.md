@@ -1,29 +1,19 @@
-python -m venv .venv
+How tu run program:
 
-pip install --upgrade pip
+- export YAGNA_AUTOCONF_APPKEY=hoc_golem_zkstark && yagna service run
+- cargo run --release --bin app
+- ./entrypoint.sh
 
-source .venv/bin/activate
+Check Locally:
 
-pip install --upgrade pip
+- cargo run --release --bin get 1414999590036870372770778692906046516351208194453833185145989807125183271772
+- cargo run --release --bin post 1414999590036870372770778692906046516351208194453833185145989807125183271772 1 < resources/main.proof
+- cargo run --release --bin get 1414999590036870372770778692906046516351208194453833185145989807125183271772
 
-pip install -U pip dapp-runner
+Deploy to Golem:
 
-curl https://raw.githubusercontent.com/golemfactory/dapp-store/81e3f50aba90a84d335a26cb9cc2ea778193be11/apps/todo-app.yaml > webapp.yaml
-
-curl https://raw.githubusercontent.com/golemfactory/dapp-runner/main/configs/default.yaml > config.yaml
-
-curl -sSf https://join.golem.network/as-requestor | bash -
-
-yagna service run
-
-yagna payment fund
-
-podman build -t neoprogram/hoc-golem-zkstark:latest .
-
-podman push localhost/hoc-golem-zkstark:latest docker.io/neoprogram/hoc-golem-zkstark:latest
-
-npx gvmkit-build neoprogram/hoc-golem-zkstark:latest
-
-npx gvmkit-build neoprogram/hoc-golem-zkstark:latest --push --nologin
-
-node src/verify.mjs
+- podman build -t neoprogram/hoc-golem-zkstark:latest .
+- podman push localhost/hoc-golem-zkstark:latest docker.io/neoprogram/hoc-golem-zkstark:latest
+- npx gvmkit-build neoprogram/hoc-golem-zkstark:latest --push --nologin
+- node src/verify.mjs
+- node src/verify.mjs
